@@ -12,7 +12,7 @@ from .serializers import CustomUserSerializer
 
 class Register(views.APIView):
     def post(self, request):
-        serializer = CustomUserSerializer(request.data)
+        serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
 
@@ -20,10 +20,17 @@ class Register(views.APIView):
 
             return Response(
                 {
-                    "refresh": refresh,
-                    "access": refresh.access_token
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token)
                 },
                 status=status.HTTP_201_CREATED
+            )
+
+        return Response(
+                {
+                    "error": serializer.errors
+                },
+                status=status.HTTP_400_BAD_REQUEST
             )
 
 class Login(views.APIView):
@@ -31,11 +38,11 @@ class Login(views.APIView):
         username = request.data.get('username')
         password = request.data.get('password')
 
-        if username == password == None:
+        if username is None or password is None:
             return Response("Input data is invalid, try again",
                             status=status.HTTP_400_BAD_REQUEST)
 
-        user = authenticate(username, password)
+        user = authenticate(username=username, password=password)
 
         if user is None:
             return Response("Input data is invalid, try again",
@@ -45,8 +52,8 @@ class Login(views.APIView):
 
         return Response(
                 {
-                    "refresh": refresh,
-                    "access": refresh.access_token
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token)
                 },
                 status=status.HTTP_201_CREATED
             )

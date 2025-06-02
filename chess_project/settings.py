@@ -19,6 +19,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -27,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'accounts',
+    'game',
 ]
 
 MIDDLEWARE = [
@@ -40,7 +42,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'chess.urls'
+ROOT_URLCONF = 'chess_project.urls'
 
 TEMPLATES = [
     {
@@ -58,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'chess.wsgi.application'
+ASGI_APPLICATION = "chess_project.asgi.application"
 
 
 # Database
@@ -122,6 +124,7 @@ AUTH_USER_MODEL = 'accounts.Player'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
